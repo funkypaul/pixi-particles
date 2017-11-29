@@ -1,6 +1,6 @@
 /*!
  * pixi-particles - v2.1.9
- * Compiled Thu, 16 Nov 2017 01:52:38 UTC
+ * Compiled Wed, 29 Nov 2017 14:34:55 UTC
  *
  * pixi-particles is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
@@ -429,17 +429,17 @@ var Emitter = function(particleParent, particleImages, config)
 	 * of {x:-50, y:0}.
 	 * to spawn at the rear of the rocket.
 	 * To change this, use updateSpawnPos().
-	 * @property {PIXI.Point} spawnPos
+	 * @property {PIXI.Point} _spawnPos
 	 * @readOnly
 	 */
-	this.spawnPos = null;
+	this._spawnPos = null;
 	/**
 	 * How the particles will be spawned. Valid types are "point", "rectangle",
 	 * "circle", "burst", "ring".
-	 * @property {String} spawnType
+	 * @property {String} _spawnType
 	 * @readOnly
 	 */
-	this.spawnType = null;
+	this._spawnType = null;
 	/**
 	 * A reference to the emitter function specific to the spawn type.
 	 * @property {Function} _spawnFunc
@@ -478,19 +478,19 @@ var Emitter = function(particleParent, particleImages, config)
 	 * Rotation of the emitter or emitter's owner in degrees. This is added to
 	 * the calculated spawn angle.
 	 * To change this, use rotate().
-	 * @property {Number} rotation
+	 * @property {Number} _rotation
 	 * @default 0
 	 * @readOnly
 	 */
-	this.rotation = 0;
+	this._rotation = 0;
 	/**
 	 * The world position of the emitter's owner, to add spawnPos to when
 	 * spawning particles. To change this, use updateOwnerPos().
-	 * @property {PIXI.Point} ownerPos
+	 * @property {PIXI.Point} _ownerPos
 	 * @default {x:0, y:0}
 	 * @readOnly
 	 */
-	this.ownerPos = null;
+	this._ownerPos = null;
 	/**
 	 * The origin + spawnPos in the previous update, so that the spawn position
 	 * can be interpolated to space out particles better.
@@ -699,6 +699,7 @@ Object.defineProperty(p, "parent",
 	}
 });
 
+
 /**
  * Sets up the emitter based on the config settings.
  * @method PIXI.particles.Emitter#init
@@ -826,45 +827,9 @@ p.init = function(art, config)
 	this.particlesPerWave = 1;
 	this.particleSpacing = 0;
 	this.angleStart = 0;
-	var spawnCircle;
 	//determine the spawn function to use
-	switch(config.spawnType)
-	{
-		case "rect":
-			this.spawnType = "rect";
-			this._spawnFunc = this._spawnRect;
-			var spawnRect = config.spawnRect;
-			this.spawnRect = new PIXI.Rectangle(spawnRect.x, spawnRect.y, spawnRect.w, spawnRect.h);
-			break;
-		case "circle":
-			this.spawnType = "circle";
-			this._spawnFunc = this._spawnCircle;
-			spawnCircle = config.spawnCircle;
-			this.spawnCircle = new PIXI.Circle(spawnCircle.x, spawnCircle.y, spawnCircle.r);
-			break;
-		case "ring":
-			this.spawnType = "ring";
-			this._spawnFunc = this._spawnRing;
-			spawnCircle = config.spawnCircle;
-			this.spawnCircle = new PIXI.Circle(spawnCircle.x, spawnCircle.y, spawnCircle.r);
-			this.spawnCircle.minRadius = spawnCircle.minR;
-			break;
-		case "burst":
-			this.spawnType = "burst";
-			this._spawnFunc = this._spawnBurst;
-			this.particlesPerWave = config.particlesPerWave;
-			this.particleSpacing = config.particleSpacing;
-			this.angleStart = config.angleStart ? config.angleStart : 0;
-			break;
-		case "point":
-			this.spawnType = "point";
-			this._spawnFunc = this._spawnPoint;
-			break;
-		default:
-			this.spawnType = "point";
-			this._spawnFunc = this._spawnPoint;
-			break;
-	}
+	this._initSpawnType(config);
+
 	//set the spawning frequency
 	this.frequency = config.frequency;
 	//set the emitter lifetime
@@ -874,9 +839,9 @@ p.init = function(art, config)
 	//determine if we should add the particle at the back of the list or not
 	this.addAtBack = !!config.addAtBack;
 	//reset the emitter position and rotation variables
-	this.rotation = 0;
-	this.ownerPos = new PIXI.Point();
-	this.spawnPos = new PIXI.Point(config.pos.x, config.pos.y);
+	this._rotation = 0;
+	this._ownerPos = new PIXI.Point();
+	this._spawnPos = new PIXI.Point(config.pos.x, config.pos.y);
 	this._prevEmitterPos = this.spawnPos.clone();
 	//previous emitter position is invalid and should not be used for interpolation
 	this._prevPosIsValid = false;
@@ -975,6 +940,49 @@ p.resetPositionTracking = function()
 {
 	this._prevPosIsValid = false;
 };
+
+/**
+ * How the particles will be spawned. Valid types are "point", "rectangle",
+ * "circle", "burst", "ring".
+ * @member {String} PIXI.particles.Emitter#spawnType
+ */
+Object.defineProperty(p, "spawnType",
+{
+	get: function() { return this._spawnType; }
+});
+/**
+ * Rotation of the emitter or emitter's owner in degrees. This is added to
+ * the calculated spawn angle.
+ * To change this, use rotate().
+ * @member {Number} PIXI.particles.Emitter#spawnType
+ */
+Object.defineProperty(p, "rotation",
+{
+	get: function() { return this._rotation; }
+});
+
+/**
+ * The world position of the emitter's owner, to add spawnPos to when
+ * spawning particles. To change this, use updateOwnerPos().
+ * @member {Boolean} PIXI.particles.Emitter#ownerPos
+ */
+Object.defineProperty(p, "ownerPos",
+{
+	get: function() { return this._ownerPos; }
+});
+
+/**
+ * Position at which to spawn particles, relative to the emitter's owner's origin.
+ * For example, the flames of a rocket travelling right might have a spawnPos
+ * of {x:-50, y:0}.
+ * to spawn at the rear of the rocket.
+ * To change this, use updateSpawnPos().
+ * @member {PIXI.Point} PIXI.particles.Emitter#spawnType
+ */
+Object.defineProperty(p, "spawnPos",
+{
+	get: function() { return this._spawnPos; }
+});
 
 /**
  * If particles should be emitted during update() calls. Setting this to false
@@ -1414,6 +1422,55 @@ p._spawnBurst = function(p, emitPosX, emitPosY, i)
 	//drop the particle at the emitter's position
 	p.position.x = emitPosX;
 	p.position.y = emitPosY;
+};
+
+/**
+ * Sets up the emitter spawn type
+ * @method PIXI.particles.Emitter#initSpawnType
+ * @param {Object} config A configuration object containing settings for the emitter.
+ */
+p._initSpawnType = function(config)
+{
+	var spawnCircle;
+	
+	switch(config.spawnType)
+	{
+		case "rect":
+			this._spawnType = "rect";
+			this._spawnFunc = this._spawnRect;
+			var spawnRect = config.spawnRect;
+			this.spawnRect = new PIXI.Rectangle(spawnRect.x, spawnRect.y, spawnRect.w, spawnRect.h);
+			break;
+		case "circle":
+			this._spawnType = "circle";
+			this._spawnFunc = this._spawnCircle;
+			spawnCircle = config.spawnCircle;
+			this.spawnCircle = new PIXI.Circle(spawnCircle.x, spawnCircle.y, spawnCircle.r);
+			break;
+		case "ring":
+			this._spawnType = "ring";
+			this._spawnFunc = this._spawnRing;
+			spawnCircle = config.spawnCircle;
+			this.spawnCircle = new PIXI.Circle(spawnCircle.x, spawnCircle.y, spawnCircle.r);
+			this.spawnCircle.minRadius = spawnCircle.minR;
+			break;
+		case "burst":
+			this._spawnType = "burst";
+			this._spawnFunc = this._spawnBurst;
+			this.particlesPerWave = config.particlesPerWave;
+			this.particleSpacing = config.particleSpacing;
+			this.angleStart = config.angleStart ? config.angleStart : 0;
+			break;
+		case "point":
+			this._spawnType = "point";
+			this._spawnFunc = this._spawnPoint;
+			break;
+		default:
+			this._spawnType = "point";
+			this._spawnFunc = this._spawnPoint;
+			break;
+	}
+	
 };
 
 /**
