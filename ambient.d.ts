@@ -51,7 +51,11 @@ declare namespace PIXI.particles {
 		protected _autoUpdate:boolean;
 		protected _destroyWhenComplete:boolean;
 		protected _completeCallback:()=>void;
-		
+		protected _spawnPos:PIXI.Point;
+		protected _ownerPos:PIXI.Point;
+		protected _spawnType:string;
+		protected _rotation:number;
+
 		public particleImages:any[];
 		public startAlpha:number;
 		public endAlpha:number;
