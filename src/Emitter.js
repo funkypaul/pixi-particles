@@ -474,54 +474,6 @@ Object.defineProperty(p, "parent",
 	}
 });
 
-/**
- * Sets up the emitter spawn type
- * @method PIXI.particles.Emitter#initSpawnType
- * @param {Object} config A configuration object containing settings for the emitter.
- */
-p.initSpawnType = function(config)
-{
-	var spawnCircle;
-	
-	switch(config.spawnType)
-	{
-		case "rect":
-			this._spawnType = "rect";
-			this._spawnFunc = this._spawnRect;
-			var spawnRect = config.spawnRect;
-			this.spawnRect = new PIXI.Rectangle(spawnRect.x, spawnRect.y, spawnRect.w, spawnRect.h);
-			break;
-		case "circle":
-			this._spawnType = "circle";
-			this._spawnFunc = this._spawnCircle;
-			spawnCircle = config.spawnCircle;
-			this.spawnCircle = new PIXI.Circle(spawnCircle.x, spawnCircle.y, spawnCircle.r);
-			break;
-		case "ring":
-			this._spawnType = "ring";
-			this._spawnFunc = this._spawnRing;
-			spawnCircle = config.spawnCircle;
-			this.spawnCircle = new PIXI.Circle(spawnCircle.x, spawnCircle.y, spawnCircle.r);
-			this.spawnCircle.minRadius = spawnCircle.minR;
-			break;
-		case "burst":
-			this._spawnType = "burst";
-			this._spawnFunc = this._spawnBurst;
-			this.particlesPerWave = config.particlesPerWave;
-			this.particleSpacing = config.particleSpacing;
-			this.angleStart = config.angleStart ? config.angleStart : 0;
-			break;
-		case "point":
-			this._spawnType = "point";
-			this._spawnFunc = this._spawnPoint;
-			break;
-		default:
-			this._spawnType = "point";
-			this._spawnFunc = this._spawnPoint;
-			break;
-	}
-	
-};
 
 /**
  * Sets up the emitter based on the config settings.
@@ -651,7 +603,7 @@ p.init = function(art, config)
 	this.particleSpacing = 0;
 	this.angleStart = 0;
 	//determine the spawn function to use
-	this.initSpawnType(config);
+	this._initSpawnType(config);
 
 	//set the spawning frequency
 	this.frequency = config.frequency;
@@ -1245,6 +1197,55 @@ p._spawnBurst = function(p, emitPosX, emitPosY, i)
 	//drop the particle at the emitter's position
 	p.position.x = emitPosX;
 	p.position.y = emitPosY;
+};
+
+/**
+ * Sets up the emitter spawn type
+ * @method PIXI.particles.Emitter#initSpawnType
+ * @param {Object} config A configuration object containing settings for the emitter.
+ */
+p._initSpawnType = function(config)
+{
+	var spawnCircle;
+	
+	switch(config.spawnType)
+	{
+		case "rect":
+			this._spawnType = "rect";
+			this._spawnFunc = this._spawnRect;
+			var spawnRect = config.spawnRect;
+			this.spawnRect = new PIXI.Rectangle(spawnRect.x, spawnRect.y, spawnRect.w, spawnRect.h);
+			break;
+		case "circle":
+			this._spawnType = "circle";
+			this._spawnFunc = this._spawnCircle;
+			spawnCircle = config.spawnCircle;
+			this.spawnCircle = new PIXI.Circle(spawnCircle.x, spawnCircle.y, spawnCircle.r);
+			break;
+		case "ring":
+			this._spawnType = "ring";
+			this._spawnFunc = this._spawnRing;
+			spawnCircle = config.spawnCircle;
+			this.spawnCircle = new PIXI.Circle(spawnCircle.x, spawnCircle.y, spawnCircle.r);
+			this.spawnCircle.minRadius = spawnCircle.minR;
+			break;
+		case "burst":
+			this._spawnType = "burst";
+			this._spawnFunc = this._spawnBurst;
+			this.particlesPerWave = config.particlesPerWave;
+			this.particleSpacing = config.particleSpacing;
+			this.angleStart = config.angleStart ? config.angleStart : 0;
+			break;
+		case "point":
+			this._spawnType = "point";
+			this._spawnFunc = this._spawnPoint;
+			break;
+		default:
+			this._spawnType = "point";
+			this._spawnFunc = this._spawnPoint;
+			break;
+	}
+	
 };
 
 /**

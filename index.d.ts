@@ -103,7 +103,8 @@ declare namespace particles {
 		protected _spawnCircle(p:Particle, emitPosX:number, emitPosY:number, i:number):void;
 		protected _spawnRing(p:Particle, emitPosX:number, emitPosY:number, i:number):void;
 		protected _spawnBurst(p:Particle, emitPosX:number, emitPosY:number, i:number):void;
-		
+		protected _initSpawnType(config:any):void;
+
 		public init(art:any, config:any):void;
 		public rotate(newRot:number):void;
 		public updateSpawnPos(x:number, y:number):void;

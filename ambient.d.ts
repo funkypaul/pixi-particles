@@ -20,11 +20,11 @@ declare namespace PIXI.particles {
 	}
 	
 	export class AnimatedParticle extends Particle {
-		private textures:PIXI.Texture[];
-		private duration:number;
-		private framerate:number;
-		private elapsed:number;
-		private loop:boolean;
+		protected textures:PIXI.Texture[];
+		protected duration:number;
+		protected framerate:number;
+		protected elapsed:number;
+		protected loop:boolean;
 		
 		public static parseArt(art:AnimatedParticleArt[]):ParsedAnimatedParticleArt[];
 		
@@ -32,25 +32,25 @@ declare namespace PIXI.particles {
 	}
 	
 	export class Emitter {
-		private _particleConstructor:new (emitter:Emitter)=>Particle;
-		private _frequency:number;
-		private _spawnFunc:(p:Particle, emitPosX:number, emitPosY:number, i:number)=>void;
-		private _prevEmitterPos:PIXI.Point;
-		private _prevPosIsValid:boolean;
-		private _posChanged:boolean;
-		private _parentIsPC:boolean;
-		private _parent:PIXI.Container;
-		private _emit:boolean;
-		private _spawnTimer:number;
-		private _emitterLife:number;
-		private _activeParticlesFirst:Particle;
-		private _activeParticlesLast:Particle;
-		private _poolFirst:Particle;
-		private _origConfig:any;
-		private _origArt:any;
-		private _autoUpdate:boolean;
-		private _destroyWhenComplete:boolean;
-		private _completeCallback:()=>void;
+		protected _particleConstructor:new (emitter:Emitter)=>Particle;
+		protected _frequency:number;
+		protected _spawnFunc:(p:Particle, emitPosX:number, emitPosY:number, i:number)=>void;
+		protected _prevEmitterPos:PIXI.Point;
+		protected _prevPosIsValid:boolean;
+		protected _posChanged:boolean;
+		protected _parentIsPC:boolean;
+		protected _parent:PIXI.Container;
+		protected _emit:boolean;
+		protected _spawnTimer:number;
+		protected _emitterLife:number;
+		protected _activeParticlesFirst:Particle;
+		protected _activeParticlesLast:Particle;
+		protected _poolFirst:Particle;
+		protected _origConfig:any;
+		protected _origArt:any;
+		protected _autoUpdate:boolean;
+		protected _destroyWhenComplete:boolean;
+		protected _completeCallback:()=>void;
 		
 		public particleImages:any[];
 		public startAlpha:number;
@@ -96,13 +96,14 @@ declare namespace PIXI.particles {
 		
 		constructor(particleParent:PIXI.Container, particleImages:any, config:any);
 		
-		private recycle(p:Particle):void;
-		private _spawnPoint(p:Particle, emitPosX:number, emitPosY:number, i:number):void;
-		private _spawnRect(p:Particle, emitPosX:number, emitPosY:number, i:number):void;
-		private _spawnCircle(p:Particle, emitPosX:number, emitPosY:number, i:number):void;
-		private _spawnRing(p:Particle, emitPosX:number, emitPosY:number, i:number):void;
-		private _spawnBurst(p:Particle, emitPosX:number, emitPosY:number, i:number):void;
-		
+		protected recycle(p:Particle):void;
+		protected _spawnPoint(p:Particle, emitPosX:number, emitPosY:number, i:number):void;
+		protected _spawnRect(p:Particle, emitPosX:number, emitPosY:number, i:number):void;
+		protected _spawnCircle(p:Particle, emitPosX:number, emitPosY:number, i:number):void;
+		protected _spawnRing(p:Particle, emitPosX:number, emitPosY:number, i:number):void;
+		protected _spawnBurst(p:Particle, emitPosX:number, emitPosY:number, i:number):void;
+		protected _initSpawnType(config:any):void;
+
 		public init(art:any, config:any):void;
 		public rotate(newRot:number):void;
 		public updateSpawnPos(x:number, y:number):void;
@@ -116,21 +117,21 @@ declare namespace PIXI.particles {
 	}
 	
 	export class Particle extends PIXI.Sprite {
-		private _sR:number;
-		private _sG:number;
-		private _sB:number;
-		private _eR:number;
-		private _eG:number;
-		private _eB:number;
-		private _doAlpha:boolean;
-		private _doScale:boolean;
-		private _doSpeed:boolean;
-		private _doAcceleration:boolean;
-		private _doColor:boolean;
-		private _doNormalMovement:boolean;
-		private _oneOverLife:number;
-		private next:Particle;
-		private prev:Particle;
+		protected _sR:number;
+		protected _sG:number;
+		protected _sB:number;
+		protected _eR:number;
+		protected _eG:number;
+		protected _eB:number;
+		protected _doAlpha:boolean;
+		protected _doScale:boolean;
+		protected _doSpeed:boolean;
+		protected _doAcceleration:boolean;
+		protected _doColor:boolean;
+		protected _doNormalMovement:boolean;
+		protected _oneOverLife:number;
+		protected next:Particle;
+		protected prev:Particle;
 		
 		public emitter:Emitter;
 		public velocity:PIXI.Point;
