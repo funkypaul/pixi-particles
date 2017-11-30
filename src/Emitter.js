@@ -1284,7 +1284,7 @@ p.destroy = function()
 		next = particle.next;
 		particle.destroy();
 	}
-	this._poolFirst = this._parent = this.particleImages = this.spawnPos = this.ownerPos =
+	this._poolFirst = this._parent = this.particleImages = this._spawnPos = this._ownerPos =
 		this.startColor = this.endColor = this.customEase = this._completeCallback = null;
 };
 

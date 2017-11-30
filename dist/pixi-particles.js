@@ -1,6 +1,6 @@
 /*!
  * pixi-particles - v2.1.9
- * Compiled Wed, 29 Nov 2017 14:34:55 UTC
+ * Compiled Thu, 30 Nov 2017 11:24:33 UTC
  *
  * pixi-particles is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
@@ -1509,7 +1509,7 @@ p.destroy = function()
 		next = particle.next;
 		particle.destroy();
 	}
-	this._poolFirst = this._parent = this.particleImages = this.spawnPos = this.ownerPos =
+	this._poolFirst = this._parent = this.particleImages = this._spawnPos = this._ownerPos =
 		this.startColor = this.endColor = this.customEase = this._completeCallback = null;
 };
 
